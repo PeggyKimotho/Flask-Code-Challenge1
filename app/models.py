@@ -1,4 +1,5 @@
 from . import db
+from sqlalchemy import CheckConstraint
 
 class Restaurant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -26,7 +27,10 @@ class Pizza(db.Model):
 
 class RestaurantPizza(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    price = db.Column(db.Float, nullable=False, CheckConstraint('price >= 1 AND price <= 30'))
+    price = db.Column(db.Float, nullable=False)
+    
+    # Use CheckConstraint to validate the price range
+    CheckConstraint('price >= 1 AND price <= 30', name='check_price_range')
 
     # Define foreign keys for the relationships
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'), nullable=False)
